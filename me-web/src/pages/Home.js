@@ -1,13 +1,33 @@
+// Source: https://www.react-google-charts.com/examples/line-chart
 import React from "react";
+import { Chart } from "react-google-charts";
+
+export const data = [
+  ["Year", "Sales", "Expenses"],
+  ["7", 1030, 540],
+  ["1", 1000, 400],
+  ["2", 1170, 460],
+  ["3", 660, 1120],
+  ["4", 1030, 540],
+  ["5", 1030, 540],
+  ["6", 1030, 540],
+  ["7", 1030, 540],
+];
+
+export const options = {
+  title: "Company Performance",
+  curveType: "function",
+  legend: { position: "bottom" },
+};
 
 export default function Home() {
   return (
-    <div className="h-full flex flex-col min-h-screen w-full">
-      <div className="h-full flex-1 flex mx-8 sm:mx-24 md:mx-32 lg:mx-48 mb-8">
-        <div className="flex items-start justify-start flex-col w-full">
-          Home!
-        </div>
-      </div>
-    </div>
+    <Chart
+      chartType="LineChart"
+      width="100%"
+      height="400px"
+      data={data}
+      options={options}
+    />
   );
 }
