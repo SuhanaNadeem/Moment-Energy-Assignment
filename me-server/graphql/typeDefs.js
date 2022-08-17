@@ -4,7 +4,10 @@ module.exports = gql`
   scalar DateTime
 
   type VoltageMeasurement {
-    test: String
+    id: String!
+
+    time: DateTime!
+    voltage: Float!
   }
 
   type Query {
@@ -12,6 +15,8 @@ module.exports = gql`
   }
 
   type Mutation {
-    addVoltageMeasurement: VoltageMeasurement
+    createVoltageMeasurementCollection(hours: Float!): [VoltageMeasurement]!
+    addVoltageMeasurement(voltage: Float!, time: DateTime!): VoltageMeasurement!
+    deleteVoltageMeasurementById(id: String!): String
   }
 `;

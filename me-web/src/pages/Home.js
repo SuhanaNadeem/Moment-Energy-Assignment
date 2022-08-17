@@ -4,7 +4,7 @@ import { Chart } from "react-google-charts";
 
 export const data = [
   ["Year", "Sales", "Expenses"],
-  ["7", 1030, 540],
+  ["7", 100.56, 540],
   ["1", 1000, 400],
   ["2", 1170, 460],
   ["3", 660, 1120],
