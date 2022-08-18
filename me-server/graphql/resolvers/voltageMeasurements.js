@@ -7,6 +7,42 @@ module.exports = {
       const voltageMeasurements = await VoltageMeasurement.find();
       return voltageMeasurements;
     },
+    async getFormattedLastNVoltageMeasurements(_, { timeRange }) {
+      let N;
+      switch (timeRange) {
+        case "1m":
+          N = 60;
+          break;
+        case "15m":
+          N = 15 * 60;
+          break;
+        case "1h":
+          N = 3600;
+          break;
+        case "6h":
+          N = 6 * 3600;
+          break;
+        case "12h":
+          N = 12 * 3600;
+          break;
+        default:
+          throw new UserInputError("Invalid time range!");
+      }
+
+      const lastNVoltageMeasurements =
+        await module.exports.Query.getLastNVoltageMeasurements(_, { N });
+
+      const formattedLastNVoltageMeasurements = [["Time", "Voltage"]];
+
+      for (let voltageMeasurement of lastNVoltageMeasurements) {
+        formattedLastNVoltageMeasurements.push([
+          String(voltageMeasurement.time),
+          String(voltageMeasurement.voltage),
+        ]);
+      }
+      console.log(formattedLastNVoltageMeasurements);
+      return formattedLastNVoltageMeasurements;
+    },
     async getLastNVoltageMeasurements(_, { N }) {
       if (N <= 0) {
         throw new UserInputError("N must be a positive value");
@@ -14,11 +50,6 @@ module.exports = {
       // N is in seconds
       let endDateTime = moment("2022-08-18T11:59:45.000Z");
       let startDateTime = moment(endDateTime).subtract(N, "seconds").toDate();
-      // var compareDate = moment("2022-08-18T00:00:15.000Z");
-      // console.log(compareDate.isBetween(startDateTime, endDateTime));
-
-      console.log("start datetime: ", startDateTime);
-      console.log("end datetime: ", endDateTime);
 
       const voltageMeasurements = await VoltageMeasurement.find();
 
