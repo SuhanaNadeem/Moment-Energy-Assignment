@@ -13,7 +13,7 @@ module.exports = gql`
   type Query {
     getVoltageMeasurements: [VoltageMeasurement]!
     getLastNVoltageMeasurements(N: Float!): [VoltageMeasurement]!
-    getFormattedLastNVoltageMeasurements(timeRange: String!): [[String]]!
+    getVoltageMeasurementsByTimeRange(timeRange: String!): [[String]]!
   }
 
   type Mutation {

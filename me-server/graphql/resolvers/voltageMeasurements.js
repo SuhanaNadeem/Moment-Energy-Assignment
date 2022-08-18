@@ -7,7 +7,7 @@ module.exports = {
       const voltageMeasurements = await VoltageMeasurement.find();
       return voltageMeasurements;
     },
-    async getFormattedLastNVoltageMeasurements(_, { timeRange }) {
+    async getVoltageMeasurementsByTimeRange(_, { timeRange }) {
       let N;
       switch (timeRange) {
         case "1m":
@@ -32,7 +32,7 @@ module.exports = {
       const lastNVoltageMeasurements =
         await module.exports.Query.getLastNVoltageMeasurements(_, { N });
 
-      const formattedLastNVoltageMeasurements = [["Time", "Voltage"]];
+      const formattedLastNVoltageMeasurements = [];
 
       for (let voltageMeasurement of lastNVoltageMeasurements) {
         formattedLastNVoltageMeasurements.push([
@@ -41,6 +41,7 @@ module.exports = {
         ]);
       }
       console.log(formattedLastNVoltageMeasurements);
+      console.log("DONE");
       return formattedLastNVoltageMeasurements;
     },
     async getLastNVoltageMeasurements(_, { N }) {
@@ -51,9 +52,9 @@ module.exports = {
       let endDateTime = "2022-08-18T11:59:45.000Z";
       let startDateTime = moment(endDateTime).subtract(N, "seconds").toDate();
 
-      console.log("N ", N);
-      console.log("startDateTime ", startDateTime);
-      console.log("endDateTime ", endDateTime);
+      // console.log("N ", N);
+      // console.log("startDateTime ", startDateTime);
+      // console.log("endDateTime ", endDateTime);
 
       const voltageMeasurements = await VoltageMeasurement.find();
 
@@ -68,8 +69,9 @@ module.exports = {
         }
       }
 
-      console.log("Returning from here:");
-      console.log(lastNVoltageMeasurements);
+      // console.log("Returning from here:");
+      // console.log(lastNVoltageMeasurements);
+
       return lastNVoltageMeasurements;
     },
   },
