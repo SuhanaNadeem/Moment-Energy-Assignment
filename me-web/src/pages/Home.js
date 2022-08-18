@@ -60,10 +60,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col w-full gap-8">
-      <div
-        className="flex flex-col items-left mb-4 text-white py-24 justify-end bg-no-repeat h-full bg-center bg-cover"
-        style={{ backgroundImage: `url(${bannerImg})` }}
-      ></div>
+      {/* Branding */}
+      <img src={bannerImg} className="w-64 ml-4 mt-4"></img>
       <h1 className="ml-4 text-lg">
         Select a time range from the dropdown to display the latest data in that
         interval, collected up till Aug 18 at 8pm.
