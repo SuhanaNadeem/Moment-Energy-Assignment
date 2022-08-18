@@ -1,6 +1,6 @@
 // Chart Docs: https://www.react-google-charts.com/examples/line-chart
 import React, { useEffect, useState } from "react";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { FaCaretDown, FaRedo } from "react-icons/fa";
 
 import { Chart } from "react-google-charts";
@@ -8,7 +8,6 @@ import { Chart } from "react-google-charts";
 export default function Home() {
   const options = {
     title: "Time vs. Voltage",
-    curveType: "function",
     legend: { position: "bottom" },
     chartArea: {
       left: 60,
@@ -48,17 +47,6 @@ export default function Home() {
     setRefreshClicked,
     getVoltageMeasurementsByTimeRange,
   ]);
-
-  // const { data: { getVoltageMeasurementsByTimeRange: data } = {} } = useQuery(
-  //   GET_VOLTAGE_MEASUREMENTS_BY_TIME_RANGE,
-  //   {
-  //     variables: { timeRange: "1m" },
-  //     onError(err) {
-  //       console.log("getVoltageMeasurementsByTimeRange Error!");
-  //       console.log(err);
-  //     },
-  //   }
-  // );
 
   useEffect(() => {
     if (data) {
@@ -108,6 +96,7 @@ export default function Home() {
             <></>
           )}
         </>
+        {/* Refresh Button */}
         <button
           onClick={(e) => {
             setRefreshClicked(true);
