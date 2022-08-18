@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { gql, useLazyQuery } from "@apollo/client";
 import { FaCaretDown, FaRedo } from "react-icons/fa";
+import bannerImg from "../images/momentenergy.png";
 
 import { Chart } from "react-google-charts";
 
@@ -52,13 +53,21 @@ export default function Home() {
     if (data) {
       // Parse the voltage values as integers and add the title of the axes
       let temp = data.map((x) => [x[0], parseInt(x[1])]);
-      temp.unshift(["Time", "Voltage"]);
+      temp.unshift(["Time", "Voltage (V)"]);
       setChartData(temp);
     }
   }, [data]);
 
   return (
     <div className="flex flex-col w-full gap-8">
+      <div
+        className="flex flex-col items-left mb-4 text-white py-24 justify-end bg-no-repeat h-full bg-center bg-cover"
+        style={{ backgroundImage: `url(${bannerImg})` }}
+      ></div>
+      <h1 className="ml-4 text-lg">
+        Select a time range from the dropdown to display the latest data in that
+        interval, collected up till Aug 18 at 8pm.
+      </h1>
       <div className="flex gap-8 ml-4">
         {/* Dropdown */}
         <>
