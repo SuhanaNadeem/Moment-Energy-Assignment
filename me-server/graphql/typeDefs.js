@@ -11,12 +11,21 @@ module.exports = gql`
   }
 
   type Query {
-    getVoltageMeasurements: [VoltageMeasurement]
+    getVoltageMeasurements: [VoltageMeasurement]!
+    getLastNVoltageMeasurements(N: Float!): [VoltageMeasurement]!
   }
 
   type Mutation {
-    createVoltageMeasurementCollection(hours: Float!): [VoltageMeasurement]!
+    createVoltageMeasurementCollection(
+      hours: Float!
+      interval: Float!
+      meanVoltage: Float!
+      step: Float!
+      minVoltage: Float!
+      maxVoltage: Float!
+    ): [VoltageMeasurement]!
     addVoltageMeasurement(voltage: Float!, time: DateTime!): VoltageMeasurement!
     deleteVoltageMeasurementById(id: String!): String
+    deleteAllVoltageMeasurements: String
   }
 `;
