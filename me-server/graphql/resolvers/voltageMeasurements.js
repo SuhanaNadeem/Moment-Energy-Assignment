@@ -12,12 +12,28 @@ module.exports = {
         throw new UserInputError("N must be a positive value");
       }
       // N is in seconds
-      let dateTime = new Date("2022-08-18");
+      let endDateTime = moment("2022-08-18T11:59:45.000Z");
+      let startDateTime = moment(endDateTime).subtract(N, "seconds").toDate();
+      // var compareDate = moment("2022-08-18T00:00:15.000Z");
+      // console.log(compareDate.isBetween(startDateTime, endDateTime));
 
-      // (a) => a.id == id
+      console.log("start datetime: ", startDateTime);
+      console.log("end datetime: ", endDateTime);
+
       const voltageMeasurements = await VoltageMeasurement.find();
 
-      return voltageMeasurements;
+      const lastNVoltageMeasurements = [];
+      let momentTime;
+      let time;
+      for (let voltageMeasurement of voltageMeasurements) {
+        time = voltageMeasurement.time;
+        momentTime = moment(time);
+        if (momentTime.isBetween(startDateTime, endDateTime, null, "[]")) {
+          lastNVoltageMeasurements.push(voltageMeasurement);
+        }
+      }
+
+      return lastNVoltageMeasurements;
     },
   },
   Mutation: {
