@@ -1,7 +1,7 @@
 // Chart Docs: https://www.react-google-charts.com/examples/line-chart
 import React, { useEffect, useState } from "react";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
-import { FaCaretDown } from "react-icons/fa";
+import { FaCaretDown, FaRedo } from "react-icons/fa";
 
 import { Chart } from "react-google-charts";
 
@@ -20,6 +20,8 @@ export default function Home() {
   };
   const [timeRange, setTimeRange] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [refreshClicked, setRefreshClicked] = useState(null);
+
   function toggleIsOpen(e) {
     e.preventDefault();
     setIsOpen(!isOpen);
@@ -33,12 +35,19 @@ export default function Home() {
   ] = useLazyQuery(GET_VOLTAGE_MEASUREMENTS_BY_TIME_RANGE);
 
   useEffect(() => {
-    if (timeRange) {
+    if (timeRange && refreshClicked) {
       getVoltageMeasurementsByTimeRange({
         variables: { timeRange },
       });
+      setRefreshClicked(false); // must click the button again to reload
     }
-  }, [timeRange, setTimeRange, getVoltageMeasurementsByTimeRange]);
+  }, [
+    timeRange,
+    setTimeRange,
+    refreshClicked,
+    setRefreshClicked,
+    getVoltageMeasurementsByTimeRange,
+  ]);
 
   // const { data: { getVoltageMeasurementsByTimeRange: data } = {} } = useQuery(
   //   GET_VOLTAGE_MEASUREMENTS_BY_TIME_RANGE,
@@ -62,43 +71,54 @@ export default function Home() {
 
   return (
     <div className="flex flex-col w-full gap-8">
-      <div className="ml-4">
+      <div className="flex gap-8 ml-4">
+        {/* Dropdown */}
+        <>
+          <button
+            onClick={toggleIsOpen}
+            className="flex justify-between items-center border border-blue-800 shadow-md rounded w-1/6 text-left appearance-none py-1 px-2 focus:outline-none"
+          >
+            {timeRange ? <p>{timeRange}</p> : <p>Time Range</p>}
+            <FaCaretDown />
+          </button>
+          {isOpen ? (
+            <>
+              <button
+                tabIndex="-1"
+                onClick={toggleIsOpen}
+                className="fixed inset-0 h-full w-full bg-transparent cursor-default z-20 focus:outline-none"
+              ></button>
+              <div className="absolute focus:outline-none left-50 w-1/5 mt-1 ml-1 py-1 bg-white rounded-lg shadow-xl text-sm z-20 overflow-y-auto">
+                {timeRanges.map((timeRange, index) => (
+                  <button
+                    onClick={(e) => {
+                      toggleIsOpen(e);
+                      setTimeRange(timeRange);
+                    }}
+                    key={index}
+                    type="button"
+                    className="focus:outline-none text-left w-full block px-2 py-1 text-gray-800 hover:text-white hover:bg-blue-800"
+                  >
+                    {timeRange}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+        </>
         <button
-          onClick={toggleIsOpen}
-          className="flex justify-between items-center border border-blue-800 shadow-md rounded w-1/4 text-left appearance-none py-1 px-2 focus:outline-none"
+          onClick={(e) => {
+            setRefreshClicked(true);
+          }}
         >
-          <p>Time Range</p>
-          <FaCaretDown />
+          <FaRedo />
         </button>
-        {isOpen ? (
-          <>
-            <button
-              tabIndex="-1"
-              onClick={toggleIsOpen}
-              className="fixed inset-0 h-full w-full bg-transparent cursor-default z-20 focus:outline-none"
-            ></button>
-            <div className="absolute focus:outline-none left-50 w-1/4 mt-1 py-1 bg-white rounded-lg shadow-xl text-sm z-20 overflow-y-auto">
-              {timeRanges.map((timeRange, index) => (
-                <button
-                  onClick={(e) => {
-                    toggleIsOpen(e);
-                    setTimeRange(timeRange);
-                  }}
-                  key={index}
-                  type="button"
-                  className="focus:outline-none text-left w-full block px-2 py-1 text-gray-800 hover:text-white hover:bg-blue-800"
-                >
-                  {timeRange}
-                </button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
       </div>
 
-      {chartData && timeRange && (
+      {/* Chart */}
+      {chartData && (
         <Chart
           chartType="LineChart"
           width="100%"
