@@ -36,7 +36,7 @@ module.exports = {
 
       for (let voltageMeasurement of lastNVoltageMeasurements) {
         formattedLastNVoltageMeasurements.push([
-          String(voltageMeasurement.time),
+          moment(voltageMeasurement.time).format("hh:mm:ss"),
           String(voltageMeasurement.voltage),
         ]);
       }
@@ -48,8 +48,12 @@ module.exports = {
         throw new UserInputError("N must be a positive value");
       }
       // N is in seconds
-      let endDateTime = moment("2022-08-18T11:59:45.000Z");
+      let endDateTime = "2022-08-18T11:59:45.000Z";
       let startDateTime = moment(endDateTime).subtract(N, "seconds").toDate();
+
+      console.log("N ", N);
+      console.log("startDateTime ", startDateTime);
+      console.log("endDateTime ", endDateTime);
 
       const voltageMeasurements = await VoltageMeasurement.find();
 
@@ -64,6 +68,8 @@ module.exports = {
         }
       }
 
+      console.log("Returning from here:");
+      console.log(lastNVoltageMeasurements);
       return lastNVoltageMeasurements;
     },
   },
